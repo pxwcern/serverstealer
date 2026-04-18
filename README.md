@@ -1,64 +1,67 @@
 # 🚀 Discord Server Stealer (v2.0)
 
-Gelişmiş Discord sunucu kopyalama ve yönetim aracı. Bu bot, kaynak sunucunun yapısını (kanallar, roller, izinler ve emojiler) yüksek doğlukla hedef sunucuya aktarır.
+An advanced Discord server cloning and management tool. This bot transfers the source server’s structure (channels, roles, permissions and emojis) to the target server with high accuracy.
 
 > [!WARNING]
-> **UYARI:** Bu proje yalnızca eğitim ve test amaçlıdır. Self-bot kullanımı Discord Hizmet Şartları'nı ihlal eder ve hesabınızın yasaklanmasına (ban) neden olabilir. Lütfen sorumlu bir şekilde kullanın.
+> **WARNING:** This project is for educational and testing purposes only. Using a self-bot violates the Discord Terms of Service and may result in your account being banned. Please use responsibly.
 
-## ✨ Öne Çıkan Özellikler
+## ✨ Key Features
 
-- **Tam Sunucu Klonlama:** Roller, kategoriler ve kanallar hiyerarşiyi bozmadan kopyalanır.
-- **Akıllı Kanal İzinleri:** Kanallara özel rol izinlerini (Permission Overwrites) isim eşleştirme yöntemiyle aktarır.
-- **Gelişmiş Emoji Kopyalama:**
-  - **Smart Downloader:** Discord CDN hatalarını (`HTTP 415`, `ECONNRESET`) otomatik tespit eder ve formatı (GIF/WebP) değiştirerek tekrar dener.
-  - **Random Obfuscation:** Emojileri rastgele isimlerle yükleyerek gizlilik sağlar.
-- **Otomatik Temizlik:** Klonlama başlamadan önce hedef sunucudaki eski kanalları ve silinebilir rolleri temizler.
-- **Rate Limit Koruması:** Discord'un "yavaşlatma" cezalarına takılmamak için aralarda akıllı bekleme süreleri kullanılır.
+- **Full Server Cloning:** Roles, categories and channels are copied without disrupting the hierarchy.
+- **Smart Channel Permissions:** Transfers channel-specific role permissions (Permission Overwrites) using a name-matching method.
+- **Advanced Emoji Cloning:**
+  - **Smart Downloader:** Automatically detects Discord CDN errors (`HTTP 415`, `ECONNRESET`) and retries by changing the format (GIF/WebP).
+  - **Random Obfuscation:** Ensures privacy by uploading emojis with randomised names.
+- **Automatic Cleanup:** Clears old channels and deletable roles on the target server before cloning begins.
+- **Rate Limit Protection:** Uses smart waiting intervals to avoid triggering Discord’s “throttling” penalties.
 
 ---
 
-## 🛠️ Kurulum ve Yapılandırma
+## 🛠️ Installation and Configuration
 
-### 1. Bağımlılıkları Yükleyin
-Node.js (v18+) kurulu olduğundan emin olun ve terminalde çalıştırın:
+### 1. Install Dependencies
+Ensure Node.js (v18+) is installed and run the following in the terminal:
 ```bash
 npm install
 ```
 
-### 2. .env Dosyasını Hazırlayın
-Ana dizindeki `.env` dosyasını şu bilgilerle doldurun:
+### 2. Prepare the .env File
+Fill in the `.env` file in the root directory with the following information:
 ```dotenv
-ACCOUNT_TOKEN=HESAP_TOKENINIZ   # Kaynak sunucuyu görmek için (Self-bot)
-BOT_TOKEN=BOT_TOKENINIZ         # Hedef sunucuya yazmak için (Manager Bot)
-SOURCE_GUILD_ID=000000000000    # Kaynak Sunucu ID
-TARGET_GUILD_ID=000000000000    # Hedef Sunucu ID
+ACCOUNT_TOKEN=YOUR_ACCOUNT_TOKEN   # To view the source server (Self-bot)
+BOT_TOKEN=YOUR_BOT_TOKEN         # To post to the target server (Manager Bot)
+SOURCE_GUILD_ID=000000000000    # Source Server ID
+TARGET_GUILD_ID=000000000000    # Target Server ID
 ```
 
 > [!IMPORTANT]
-> Botun hedef sunucuda **Yönetici (Administrator)** yetkisine sahip olduğundan ve en üstte yer aldığından emin olun.
+> Ensure the bot has **Administrator** privileges on the target server and is at the top of the list.
 
 ---
 
-## 🚀 Kullanılabilir Komutlar
+## 🚀 Available Commands
 
-Aşağıdaki komutları terminalde çalıştırarak botu yönetebilirsiniz:
+You can manage the bot by running the following commands in the terminal:
 
-| Komut | Açıklama |
+| Command | Description |
 | :--- | :--- |
-| `npm start` | **Full Clone:** Roller, Kanallar ve Kategorileri tamamen klonlar. |
-| `npm run channels` | **Sadece Kanallar:** Kanalları ve izinlerini (overwrites) kopyalar. |
-| `npm run emojis` | **Emoji Klonla:** Emojileri temizler ve rastgele isimlerle yeniden yükler. |
-| `npm run clear` | **Rol Temizliği:** Hedef sunucudaki silinebilir tüm rolleri temizler. |
+| `npm start` | **Full Clone:** Fully clones Roles, Channels and Categories. |
+| `npm run channels` | **Channels Only:** Copies channels and their permissions (overwrites). |
+| `npm run emojis` | **Clone Emojis:** Clears emojis and reloads them with random names. |
+| `npm run clear` | **Role Cleanup:** Clears all deletable roles on the target server. |
 
 ---
 
-## 🔍 Teknik Detaylar
+## 🔍 Technical Details
 
-- **Hız ve Stabilite:** Bot, büyük sunucularda veri kaybı yaşamamak için `undici` motorunu kullanır ve her işlem arasında (`delay`) bekler.
-- **Emoji Format Desteği:** Eğer bir emoji `.gif` olarak indirilemezse, bot otomatik olarak `.webp` formatına dönerek indirmeyi tamamlar.
-- **Hiyerarşi Koruma:** Roller ve kanallar `rawPosition` değerine göre sıralanarak orijinal sunucu düzeni birebir korunur.
+- **Speed and Stability:** The bot uses the `undici` engine to avoid data loss on large servers and waits for a `delay` between each operation.
+- **Emoji Format Support:** If an emoji cannot be downloaded as a `.gif`, the bot automatically switches to the `.webp` format to complete the download.
+- **Hierarchy Preservation:** Roles and channels are sorted according to the `rawPosition` value, ensuring the original server structure is preserved exactly.
 
 ---
 
-## 🛡️ Sorumluluk Reddi
-Bu yazılım "olduğu gibi" sunulmaktadır. Kullanımından kaynaklanan herhangi bir hesap kısıtlamasından geliştirici sorumlu tutulamaz.
+## 🛡️ Disclaimer
+This software is provided ‘as is’. The developer cannot be held liable for any account restrictions arising from its use.
+
+
+Translated with DeepL.com (free version)
