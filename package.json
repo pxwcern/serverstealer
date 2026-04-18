@@ -1,0 +1,23 @@
+{
+  "name": "serverstaler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "clear": "node clear-roles.js",
+    "channels": "node clone-channels.js",
+    "emojis": "node clone-emojis.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "pxwcern",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "debug": "^4.4.3",
+    "discord.js": "^14.26.2",
+    "discord.js-selfbot-v13": "^3.7.1",
+    "dotenv": "^17.4.1"
+  }
+}

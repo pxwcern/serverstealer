@@ -1,0 +1,181 @@
+## Discord Sunucu Kopyalama Botu Kurulum Rehberi (Türkçe)
+
+1. **Proje klasörü**: `Discord Sunucu Kopyalama` içinde `package.json`, `index.js`, `.env`, `README.md`, `kurulum nasıl yapılır.txt` bulunmalı.
+
+2. **Node.js & npm**: LTS (v18+) kurun. `node -v` ve `npm -v` ile sürüm kontrolü yapın.
+
+3. **Bağımlılıkları kur**:
+   ```bash
+   cd "Discord Sunucu Kopyalama"
+   npm install
+   ```
+
+4. **.env dosyasını oluştur** ve aşağıdakileri ekle:
+   ```dotenv
+   ACCOUNT_TOKEN=KENDI_DISCORD_HESAP_TOKENINIZ
+   BOT_TOKEN=DISCORD_BOT_TOKENINIZ
+   SOURCE_GUILD_ID=KAYNAK_SUNUCU_ID
+   TARGET_GUILD_ID=HEDEF_SUNUCU_ID
+   ```
+   > **Uyarı:** `ACCOUNT_TOKEN` bir kullanıcı tokenıdır, Discord kurallarını ihlal eder.
+
+5. **Intents ayarları**: Discord Geliştirici Portalı → Bot sekmesi → `SERVER MEMBERS INTENT` ve `MESSAGE CONTENT INTENT` (gerekliyse) işaretleyin.
+
+6. **Botu çalıştır**:
+   ```bash
+   npm start
+   ```
+   Bot kaynak sunucudan roller, kategoriler ve kanalları hedef sunucuya kopyalar. Başarı mesajı `✅ Server cloning completed!` olur.
+
+7. **Hata kontrol**:
+   - Token hatası → .env kontrol.
+   - İzin hatası → Botun hedef sunucuda gerekli yönetim izinlerine sahip olduğundan emin olun.
+   - Rate‑limit → `index.js` içindeki `await delay(500)` süresini artırabilirsiniz.
+
+**Not:** Bu proje sadece eğitim amaçlıdır. Self‑bot kullanımı hesabınızın banlanmasına yol açabilir. Lütfen sorumlu şekilde test sunucularında kullanın.
+
+
+### 1️⃣ Proje klasörü
+Bu proje **Discord Sunucu Kopyalama** adlı klasörde bulunmalıdır. Klasör içinde aşağıdaki dosyalar yer alır:
+- `package.json`
+- `index.js`
+- `.env`
+- `README.md`
+- `kurulum nasıl yapılır.txt`
+- (opsiyonel) `.gitignore`
+
+### 2️⃣ Node.js ve npm kurulumu
+1. https://nodejs.org adresinden **LTS** sürümünü indirin ve kurun (Node v18+ önerilir).
+2. Kurulumdan sonra terminalde aşağıdaki komutları çalıştırarak kurulumun başarılı olduğunu doğrulayın:
+```bash
+node -v
+npm -v
+```
+Her iki komut da sürüm numarası döndürmelidir.
+
+### 3️⃣ Proje klasörüne gidin ve bağımlılıkları yükleyin
+```bash
+cd "Discord Sunucu Kopyalama"
+npm install
+```
+Bu komut `discord.js`, `discord.js-selfbot-v13` ve `dotenv` paketlerini kurar.
+
+### 4️⃣ `.env` dosyasını oluşturun ve doldurun
+`.env` dosyasını bir metin editörüyle açın ve aşağıdaki satırları **kendi bilgilerinizle** doldurun:
+```dotenv
+ACCOUNT_TOKEN=KENDI_DISCORD_HESAP_TOKENINIZ   # self‑bot (kullanıcı) tokenı – DİKKAT!
+BOT_TOKEN=DISCORD_BOT_TOKENINIZ               # bot tokenı
+SOURCE_GUILD_ID=KAYNAK_SUNUCU_ID               # kopyalanacak sunucunun ID'si
+TARGET_GUILD_ID=HEDEF_SUNUCU_ID                # kopyalamanın yapılacağı sunucu ID'si
+```
+> **Uyarı:** `ACCOUNT_TOKEN` bir **kullanıcı tokenıdır** ve Discord’un Hizmet Şartlarını ihlal eder. Bu kod yalnızca eğitim amaçlıdır; hesabınızın banlanma riski vardır.
+
+### 5️⃣ Discord Geliştirici Portalı’nda **Intents**’leri etkinleştirin
+1. https://discord.com/developers/applications adresine gidin.
+2. Botunuzun bulunduğu uygulamayı seçin → **Bot** sekmesi.
+3. **Privileged Gateway Intents** bölümünde **SERVER MEMBERS INTENT** ve **MESSAGE CONTENT INTENT** (eğer mesaj içeriğine ihtiyaç duyuyorsanız) kutularını işaretleyin.
+4. Değişiklikleri kaydedin.
+
+### 6️⃣ `.gitignore` ekleyin (isteğe bağlı ama şiddetle tavsiye edilir)
+```bash
+echo ".env" > .gitignore
+```
+Bu, `.env` dosyasının versiyon kontrolüne eklenmesini engeller.
+
+### 7️⃣ `index.js` içinde intents ayarlarını kontrol edin
+- **Self‑bot** (`selfClient`) artık aşağıdaki intents listesiyle başlatılıyor:
+```javascript
+ws: { intents: [
+  Intents.FLAGS.GUILDS,
+  Intents.FLAGS.GUILD_ROLES,
+  Intents.FLAGS.GUILD_CHANNELS,
+  Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+] },
+```
+- **Normal bot** (`botClient`) da aynı intents listesine sahiptir (README ve kod içinde zaten bulunuyor).
+
+### 8️⃣ Botu çalıştırın
+```bash
+npm start
+```
+Bot iki istemciyi (self‑bot ve normal bot) giriş yaptıktan sonra:
+1. Kaynak sunucunun roller, kategoriler ve kanallarını çeker.
+2. Hedef sunucuda aynı yapıyı oluşturur.
+3. İşlem tamamlandığında `✅ Server cloning completed!` mesajı gösterilir ve script sonlanır.
+
+### 9️⃣ Hata kontrol listesi (en yaygın hatalar)
+- **`Intents.ALL is undefined`** → `index.js` dosyasındaki self‑bot intents kısmı yukarıdaki gibi güncellenmelidir (biz zaten yaptık).
+- **Token hatası** → `.env` dosyasındaki `ACCOUNT_TOKEN` ve `BOT_TOKEN` değerlerinin doğru ve geçerli olduğundan emin olun.
+- **İzin hatası** → Botun hedef sunucuda `MANAGE_ROLES`, `MANAGE_CHANNELS`, `MANAGE_GUILD` izinlerine sahip olduğundan emin olun.
+- **Privileged intents kapalı** → Geliştirici Portalı’nda ilgili intents’leri etkinleştirin.
+- **Node sürümü uyumsuz** → Node v18+ kullanın; çok eski sürümler `discord.js` ile uyumsuz çalışır.
+- **Rate‑limit** → Büyük sunucularda `index.js` içindeki `await delay(500)` süresini artırabilirsiniz (örnek: `await delay(1000)`).
+
+### 🔔 Son Not
+Bu proje **eğitim amaçlı**dır. Discord’un hizmet şartlarını ihlal eden bir self‑bot kullanmak hesabınızın kalıcı olarak yasaklanmasına yol açabilir. Lütfen sorumluluklarınızı bilin ve sadece test sunucularında çalıştırın.
+
+---
+**Kurulum tamam!** Artık `npm start` komutunu çalıştırarak Discord Sunucu Kopyalama botunu sorunsuz bir şekilde kullanabilirsiniz.
+
+### 1. Proje Dosyalarını İndirin / Oluşturun
+Bu adımları zaten tamamladık. Proje klasörünüz `Discord Sunucu Kopyalama` içinde şu dosyalar bulunmalı:
+- `package.json`
+- `index.js`
+- `.env`
+- `README.md`
+- `kurulum nasıl yapılır.txt` (bu dosya)
+
+### 2. Node.js ve npm Kurulumu
+1. **Node.js**'i resmi sitesinden (https://nodejs.org) indirin ve kurun. LTS sürümü önerilir.
+2. Kurulum sonrası komut satırında aşağıdaki komutları çalıştırarak kurulumun başarılı olduğunu doğrulayın:
+   ```bash
+   node -v
+   npm -v
+   ```
+   Çıktı versiyon numaraları göstermelidir.
+
+### 3. Bağımlılıkların Yüklenmesi
+Proje klasörüne (`Discord Sunucu Kopyalama`) gidin ve aşağıdaki komutu çalıştırın:
+```bash
+npm install
+```
+Bu komut `discord.js`, `discord.js-selfbot-v13` ve `dotenv` paketlerini yükleyecek.
+
+### 4. `.env` Dosyasını Düzenleyin
+`.env` dosyasını bir metin editörüyle açın ve aşağıdaki satırları kendi bilgilerinizle doldurun:
+```dotenv
+ACCOUNT_TOKEN=KENDI_DISCORD_HESAP_TOKENINIZ   # self‑bot (kullanıcı) tokenı – **DİKKAT!**
+BOT_TOKEN=DISCORD_BOT_TOKENINIZ               # bot tokenı
+SOURCE_GUILD_ID=KAYNAK_SUNUCU_ID               # kopyalanacak sunucunun ID'si
+TARGET_GUILD_ID=HEDEF_SUNUCU_ID                # kopyalamanın yapılacağı sunucu ID'si
+```
+> **Uyarı:** `ACCOUNT_TOKEN` bir **kullanıcı tokenıdır** ve Discord’un hizmet şartlarını ihlal eder. Bu kod sadece eğitim amaçlıdır; hesabınızın banlanma riski vardır.
+
+### 5. Botu Çalıştırma
+Proje klasöründe aşağıdaki komutu çalıştırın:
+```bash
+npm start
+```
+Bu komut şu adımları gerçekleştirir:
+1. Self‑bot (hesap tokenı) ile kaynak sunucuya bağlanır ve sunucu verilerini okur.
+2. Bot (bot tokenı) ile hedef sunucuya bağlanır.
+3. Kaynak sunucudaki **roller**, **kategoriler** ve **kanallar** hedef sunucuda aynı şekilde oluşturulur.
+4. İşlem tamamlandığında `✅ Server cloning completed!` mesajı konsolda görünür ve script sonlanır.
+
+### 6. Test ve Kontrol
+- İlk olarak **deneme amaçlı** iki ayrı test sunucusu oluşturun (biri kaynak, diğeri hedef).
+- `npm start` komutunu çalıştırdıktan sonra hedef sunucuda roller ve kanalların aynı şekilde oluşturulduğunu kontrol edin.
+- Büyük sunucularda **rate‑limit** (istek sınırı) hataları alabilirsiniz; `index.js` içindeki `delay` değerini (örnek: `await delay(500)`) artırarak bu sorunu azaltabilirsiniz.
+
+### 7. Ek Güvenlik ve Temizlik
+- `.env` dosyasını **asla paylaşmayın** ve bir sürüm kontrol sistemine (Git) eklemeyin. `.gitignore` dosyasına `.env` eklemek bu konuda yardımcı olur.
+- Botun hedef sunucuda `MANAGE_ROLES`, `MANAGE_CHANNELS`, `MANAGE_GUILD` izinlerine sahip olduğundan emin olun.
+- Kullanıcı tokenı (self‑bot) kullanmak Discord kurallarına aykırıdır; sadece test amaçlı ve risk aldığınız bir ortamda çalıştırın.
+
+### 8. Sorun Giderme
+- **Bot giriş hatası**: Tokenların doğru ve geçerli olduğundan emin olun; botun hedef sunucuda gerekli izinleri olduğuna bakın.
+- **Rate‑limit hatası**: `index.js` içindeki `delay` süresini artırın (örnek: `await delay(1000)`).
+- **Kopyalama eksikliği**: Kaynak sunucudaki bazı roller/kanallar `managed` (örnek: entegrasyon rolleri) ise oluşturulamaz; script bu rolleri atlar.
+
+---
+**Bu rehber sadece eğitim amaçlıdır.** Discord’un hizmet şartlarını ihlal eden eylemler hesabınızın kalıcı olarak yasaklanmasına yol açabilir. Lütfen sorumluluklarınızı bilin.
